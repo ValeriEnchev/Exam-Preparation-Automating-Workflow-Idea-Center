@@ -44,9 +44,9 @@ namespace IdeaCenter
         private string GetJwtToken(string email, string password)
         {
             RestClient tmpClient = new RestClient(BaseUrl);
-            RestRequest request = new RestRequest("/api/User/Authentication", Method.Post);
+            RestRequest? request = new RestRequest("/api/User/Authentication", Method.Post);
             request.AddJsonBody(new { email, password });
-            RestResponse response = tmpClient.Post(request);
+            RestResponse? response = tmpClient.Post(request);
             
             if (response.IsSuccessStatusCode)
             {
@@ -62,7 +62,7 @@ namespace IdeaCenter
 
         private static string GetRandomString(int length)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const string? chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             char[] stringChars = new char[length];
 
             for (int i = 0; i < length; i++)
@@ -78,15 +78,15 @@ namespace IdeaCenter
         public void Test1_Create_a_New_Idea_with_the_Required_Fields()
         {
             //•	Create a test to send a POST request to add a new idea.
-            var newIdea = new IdeaDTO
+            IdeaDTO? newIdea = new IdeaDTO
             {
                 Title = $"Test Idea {GetRandomString(6)}",
                 Description = $"This is a test idea description.",
                 Url = ""
             };
-            RestRequest request = new RestRequest("/api/Idea/Create", Method.Post);
+            RestRequest? request = new RestRequest("/api/Idea/Create", Method.Post);
             request.AddJsonBody(newIdea);
-            RestResponse response = client.Execute(request);
+            RestResponse? response = client.Execute(request);
 
             ApiResponseDTO? ApiResponse = JsonSerializer.Deserialize<ApiResponseDTO>(response.Content);
 
@@ -101,10 +101,10 @@ namespace IdeaCenter
         public void Test2_Get_All_Ideas()
         {
             //•	Create a test to send a GET request to list all ideas.
-            RestRequest request = new RestRequest("/api/Idea/All", Method.Get);
+            RestRequest? request = new RestRequest("/api/Idea/All", Method.Get);
             RestResponse response = client.Execute(request);
 
-            List<ApiResponseDTO> ApiResponseItems = JsonSerializer.Deserialize<List<ApiResponseDTO>>(response.Content);
+            List<ApiResponseDTO>? ApiResponseItems = JsonSerializer.Deserialize<List<ApiResponseDTO>>(response.Content);
 
             //•	Assert that the response status code is OK(200).
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -113,7 +113,7 @@ namespace IdeaCenter
             Assert.That(ApiResponseItems, Is.Not.Empty);
 
             //•	Store the id of the last created idea in a static member of the test class to maintain its value between test runs.
-            lastCreatedIdeaId = ApiResponseItems.LastOrDefault().IdeaId;
+            lastCreatedIdeaId = ApiResponseItems.LastOrDefault()?.IdeaId;
             //Console.WriteLine(ApiResponseItems.LastOrDefault().IdeaId);
             //Console.WriteLine(ApiResponseItems[ApiResponseItems.Count-1].IdeaId);
         }
@@ -123,19 +123,19 @@ namespace IdeaCenter
         public void Test3_Edit_the_Last_Idea()
         {
             //•	Create a test that sends a PUT request to edit the idea.
-            var editIdea = new IdeaDTO
+            IdeaDTO? editIdea = new IdeaDTO
             {
                 Title = $"Edited Idea {GetRandomString(10)}",
                 Description = $"This is an edited idea {GetRandomString(6)} description. ",
                 Url = ""
             };
-            RestRequest request = new RestRequest("/api/Idea/Edit", Method.Put);
+            RestRequest? request = new RestRequest("/api/Idea/Edit", Method.Put);
             request.AddJsonBody(editIdea);
             //•	Use the id that you stored in the previous request as a query parameter.
             request.AddQueryParameter("ideaId", lastCreatedIdeaId);
             RestResponse response = client.Execute(request);
 
-            ApiResponseDTO ApiResponse = JsonSerializer.Deserialize<ApiResponseDTO>(response.Content);
+            ApiResponseDTO? ApiResponse = JsonSerializer.Deserialize<ApiResponseDTO>(response.Content);
 
             //•	Assert that the response status code is OK(200).
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -148,7 +148,7 @@ namespace IdeaCenter
         public void Test4_Delete_the_Idea()
         {
             //•	Create a test that sends a DELETE request.
-            RestRequest request = new RestRequest("/api/Idea/Delete", Method.Delete);
+            RestRequest? request = new RestRequest("/api/Idea/Delete", Method.Delete);
             //•	Use the id that you stored in the "Get All Ideas" request as a query parameter.
             request.AddQueryParameter("ideaId", lastCreatedIdeaId);
             RestResponse response = client.Execute(request);
@@ -164,7 +164,7 @@ namespace IdeaCenter
         public void Test5_Try_to_Create_an_Idea_without_the_Required_Fields()
         {
             //•	Write a test that attempts to create a idea with missing required fields(Title, Description).
-            var newIdea = new IdeaDTO
+            IdeaDTO? newIdea = new IdeaDTO
             {
                 Title = "",
                 Description = "",
@@ -188,7 +188,7 @@ namespace IdeaCenter
         public void Test6_Try_to_Edit_a_Non_existing_Idea()
         {
             //•	Create a test that sends a PUT request to edit the idea.
-            var editIdea = new IdeaDTO
+            IdeaDTO? editIdea = new IdeaDTO
             {
                 Title = "Edited Non-Existing Idea",
                 Description = "This is an updated test idea description for a non-existing idea.",
