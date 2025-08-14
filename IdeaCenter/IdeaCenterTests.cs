@@ -27,7 +27,7 @@ namespace IdeaCenter
         private const string LoginPassword = "qwe321";
 
         private static Random random = new Random();
-        private static string lastCreatedIdeaId;
+        private static string? lastCreatedIdeaId;
         private const string nonExistedIdeaId = "-1";
 
         [OneTimeSetUp]
@@ -88,7 +88,7 @@ namespace IdeaCenter
             request.AddJsonBody(newIdea);
             RestResponse response = client.Execute(request);
 
-            ApiResponseDTO ApiResponse = JsonSerializer.Deserialize<ApiResponseDTO>(response.Content);
+            ApiResponseDTO? ApiResponse = JsonSerializer.Deserialize<ApiResponseDTO>(response.Content);
 
             //•	Assert that the response status code is OK(200).
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
