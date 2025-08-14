@@ -6,23 +6,27 @@ on:
   pull_request:
     branches: [ "main" ]
 
-jobs:
-  build:
+env:
+  DOTNET_VERSION: '9.0.x'
 
+jobs:
+  build-and-test:
     runs-on: ubuntu-latest
-    env:
-      DOTNET_VERSION: '8.0.x'
       
     steps:
     - name: Checkout the repo
       uses: actions/checkout@v4
+      
     - name: Install the needed SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+        
     - name: Restore the packages
       run: dotnet restore
+      
     - name: Build the solution
       run: dotnet build --no-restore
+      
     - name: Run all tests
       run: dotnet test --no-build --verbosity normal
