@@ -1,47 +1,30 @@
-name: .NET Build and Test
+name: .NET
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     env:
       TEST_USER_EMAIL: "testmail@mail.com"
       TEST_USER_PASSWORD: "password"
       BASE_URL: "https://localhost:5000"
+      DOTNET_VERSION: '8.0.x'
 
     steps:
-      # Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # Set up .NET SDK
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0'  # Adjust the version to match your project
-
-      # Restore dependencies
-      - name: Restore dependencies
-        run: dotnet restore
-
-      # Build the project
-      - name: Build project
-        run: dotnet build --configuration Release
-
-      # Run NUnit tests
-      - name: Run NUnit tests
-        run: dotnet test --configuration Release --no-build --logger "nunit;LogFilePath=test-results.xml"
-
-      # Upload test results (optional)
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: test-results.xml
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --configuration Release --no-build
