@@ -1,20 +1,10 @@
 using IdeaCenter.Models;
-//using NUnit.Framework;
-//using NUnit.Framework.Internal;
+using NUnit.Framework;
 using RestSharp;
 using RestSharp.Authenticators;
-//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Data.Common;
 using System.Net;
-//using System.Reflection;
-//using System.Reflection.Metadata;
-//using System.Runtime.Intrinsics.X86;
-//using System.Text;
 using System.Text.Json;
-//using static System.Formats.Asn1.AsnWriter;
-//using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace IdeaCenter
 {
@@ -93,7 +83,7 @@ namespace IdeaCenter
             //•	Assert that the response status code is OK(200).
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             //•	Assert that the response message indicates the idea was "Successfully created!".
-            Assert.That(ApiResponse.Msg, Is.EqualTo("Successfully created!"));
+            Assert.That(ApiResponse?.Msg, Is.EqualTo("Successfully created!"));
         }
 
         //1.4. Get All Ideas
@@ -140,7 +130,7 @@ namespace IdeaCenter
             //•	Assert that the response status code is OK(200).
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             //•	Assert that the response message indicates the idea was "Successfully edited".
-            Assert.That(ApiResponse.Msg, Is.EqualTo("Edited successfully"));
+            Assert.That(ApiResponse?.Msg, Is.EqualTo("Edited successfully"));
         }
 
         //1.6. Delete the Idea that you Edited
