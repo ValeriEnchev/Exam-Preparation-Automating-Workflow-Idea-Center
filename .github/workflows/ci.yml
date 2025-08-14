@@ -23,7 +23,7 @@ jobs:
 
       # Set up .NET SDK
       - name: Set up .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0'  # Adjust the version to match your project
 
@@ -41,7 +41,7 @@ jobs:
 
       # Upload test results (optional)
       - name: Upload test results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: test-results.xml
